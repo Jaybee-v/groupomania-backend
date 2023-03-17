@@ -63,3 +63,19 @@ exports.getOneUser = (req, res, next) => {
         .then((user) => res.status(200).json(user))
         .catch((error) => res.status(404).json(error))
 }
+
+// exports.deleteUser = (req, res, next) => {
+//     User.findOne({ _id: req.params.id })
+//         .then(() => {
+//             console.log("je suis la")
+//             User.deleteOne({ _id: req.params.id })
+//                 .then(() => {
+//                     console.log("je suis ici")
+//                     res.status(200).json({ message: "User supprimé" })
+//                 })
+//                 .catch((error) => res.status(401).json({ error }))
+//         })
+//         .catch((error) => {
+//             res.status(404).json(error)
+//         })
+// }
