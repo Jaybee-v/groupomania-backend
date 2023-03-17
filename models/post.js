@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const postSchema = mongoose.Schema({
     userId: { type: String },
-    // imageUrl: { type: String },
+    imageUrl: { type: String },
     content: { type: String },
     dateAdd: { type: Date, default: Date.now },
     likes: { type: Number, default: 0 },

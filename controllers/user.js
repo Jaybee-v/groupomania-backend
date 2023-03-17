@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
+const Post = require("../models/post")
+const Comments = require("../models/commentary")
 
 exports.signup = (req, res, next) => {
     bcrypt
@@ -64,18 +66,41 @@ exports.getOneUser = (req, res, next) => {
         .catch((error) => res.status(404).json(error))
 }
 
-// exports.deleteUser = (req, res, next) => {
-//     User.findOne({ _id: req.params.id })
-//         .then(() => {
-//             console.log("je suis la")
-//             User.deleteOne({ _id: req.params.id })
-//                 .then(() => {
-//                     console.log("je suis ici")
-//                     res.status(200).json({ message: "User supprimé" })
-//                 })
-//                 .catch((error) => res.status(401).json({ error }))
-//         })
-//         .catch((error) => {
-//             res.status(404).json(error)
-//         })
-// }
+exports.deleteUser = (req, res, next) => {
+    User.findOne({ _id: req.params.id })
+        .then(() => {
+            console.log("je suis la")
+            Post.find()
+                .then((posts) => {
+                    console.log("1")
+                    const [postsUser] = posts.filter(
+                        (p) => p.userId === req.params.id
+                    )
+                    Post.deleteMany(postsUser).then(() => {
+                        console.log("2")
+                        Comments.find().then((comments) => {
+                            console.log("3")
+                            const [commentsUser] = comments.filter(
+                                (c) => c.userId === req.params.id
+                            )
+                            Comments.deleteMany(commentsUser).then(() => {
+                                console.log("4")
+                                User.deleteOne({ _id: req.params.id }).then(
+                                    () => {
+                                        console.log("5")
+                                    }
+                                )
+                            })
+                        })
+                    })
+                })
+                .then(() => {
+                    console.log("je suis ici")
+                    res.status(200).json({ message: "User supprimé" })
+                })
+                .catch((error) => res.status(401).json({ error }))
+        })
+        .catch((error) => {
+            res.status(404).json(error)
+        })
+}

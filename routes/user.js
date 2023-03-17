@@ -8,6 +8,6 @@ router.post("/signin", userCtrl.signin)
 
 router.get("/:id", userCtrl.getOneUser)
 
-// router.delete("/:id", userCtrl.deleteUser)
+router.delete("/:id", userCtrl.deleteUser)
 
 module.exports = router

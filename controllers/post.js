@@ -21,10 +21,10 @@ exports.addPost = (req, res, next) => {
     const post = new Post({
         ...postObj,
         userId: req.body.post.userId,
-        // imageUrl:
-        //     `${req.protocol}://${req.get("host")}/images/posts/${
-        //         req.file.filename
-        //     }` || null,
+        imageUrl:
+            `${req.protocol}://${req.get("host")}/images/posts/${
+                req.file.filename
+            }` || null,
     })
     console.log(post)
     post.save()
