@@ -32,8 +32,10 @@ app.use((req, res, next) => {
 
 const userRoutes = require("./routes/user")
 const postRoutes = require("./routes/post")
+const commentRoutes = require("./routes/commentary")
 
 app.use("/user", userRoutes)
 app.use("/post", postRoutes)
+app.use("/comment", commentRoutes)
 
 module.exports = app
