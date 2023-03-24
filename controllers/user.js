@@ -68,35 +68,32 @@ exports.getOneUser = (req, res, next) => {
 
 exports.deleteUser = (req, res, next) => {
     User.findOne({ _id: req.params.id })
-        .then(() => {
-            console.log("je suis la")
+        .then((user) => {
+            const userId = user._id
             Post.find()
                 .then((posts) => {
-                    console.log("1")
+                    const postFilter = { userId: userId }
                     const [postsUser] = posts.filter(
                         (p) => p.userId === req.params.id
                     )
-                    Post.deleteMany(postsUser).then(() => {
-                        console.log("2")
+                    Post.deleteMany(postFilter).then(() => {
                         Comments.find().then((comments) => {
-                            console.log("3")
+                            const commentFilter = { userId: userId }
                             const [commentsUser] = comments.filter(
                                 (c) => c.userId === req.params.id
                             )
-                            Comments.deleteMany(commentsUser).then(() => {
-                                console.log("4")
+                            Comments.deleteMany(commentFilter).then(() => {
                                 User.deleteOne({ _id: req.params.id }).then(
                                     () => {
                                         console.log("5")
+                                        res.status(200).json({
+                                            message: "User supprimé",
+                                        })
                                     }
                                 )
                             })
                         })
                     })
-                })
-                .then(() => {
-                    console.log("je suis ici")
-                    res.status(200).json({ message: "User supprimé" })
                 })
                 .catch((error) => res.status(401).json({ error }))
         })

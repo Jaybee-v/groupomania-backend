@@ -13,18 +13,19 @@ exports.getOnePost = (req, res, next) => {
         .then((post) => res.status(200).json(post))
         .catch((error) => res.status(404).json({ error }))
 }
-
-exports.addPost = (req, res, next) => {
-    const postObj = req.body.post
+exports.addPost = async (req, res, next) => {
+    console.log(req.body)
+    const postObj = JSON.parse(req.body.post)
     delete postObj._id
     delete postObj._userId
     const post = new Post({
         ...postObj,
-        userId: req.body.post.userId,
-        imageUrl:
-            `${req.protocol}://${req.get("host")}/images/posts/${
-                req.file.filename
-            }` || null,
+        userId: postObj.userId,
+        imageUrl: req.file
+            ? `${req.protocol}://${req.get("host")}/images/posts/${
+                  req.file.filename
+              }`
+            : null,
     })
     console.log(post)
     post.save()
@@ -33,6 +34,28 @@ exports.addPost = (req, res, next) => {
         )
         .catch((error) => res.status(400).json({ error }))
 }
+// exports.addPost = (req, res, next) => {
+//     const postObj = req.body.post ? req.body.post.post : null
+
+//     if (!postObj || !postObj.content) {
+//         return res.status(400).json({ error: "Le contenu du post est requis." })
+//     }
+//     const post = new Post({
+//         ...postObj,
+//         userId: req.body.post.userId,
+//         imageUrl: req.file
+//             ? `${req.protocol}://${req.get("host")}/images/posts/${
+//                   req.file.filename
+//               }`
+//             : null,
+//     })
+
+//     post.save()
+//         .then(() =>
+//             res.status(201).json({ message: "Nouveau post enregistré!" })
+//         )
+//         .catch((error) => res.status(400).json({ error }))
+// }
 
 exports.deletePost = (req, res, next) => {
     Post.findOne({ _id: req.params.id })

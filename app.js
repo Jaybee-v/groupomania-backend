@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 const userRoutes = require("./routes/user")
 const postRoutes = require("./routes/post")
 const commentRoutes = require("./routes/commentary")
-
+app.use("/images/posts", express.static(path.join(__dirname, "images/posts")))
 app.use("/user", userRoutes)
 app.use("/post", postRoutes)
 app.use("/comment", commentRoutes)
