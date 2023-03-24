@@ -3,6 +3,7 @@ const fs = require("fs")
 const User = require("../models/user")
 
 exports.getAllPosts = (req, res, next) => {
+    console.log("on recup le post")
     Post.find()
         .then((posts) => res.status(200).json(posts))
         .catch((error) => res.status(400).json({ error }))
@@ -34,28 +35,6 @@ exports.addPost = async (req, res, next) => {
         )
         .catch((error) => res.status(400).json({ error }))
 }
-// exports.addPost = (req, res, next) => {
-//     const postObj = req.body.post ? req.body.post.post : null
-
-//     if (!postObj || !postObj.content) {
-//         return res.status(400).json({ error: "Le contenu du post est requis." })
-//     }
-//     const post = new Post({
-//         ...postObj,
-//         userId: req.body.post.userId,
-//         imageUrl: req.file
-//             ? `${req.protocol}://${req.get("host")}/images/posts/${
-//                   req.file.filename
-//               }`
-//             : null,
-//     })
-
-//     post.save()
-//         .then(() =>
-//             res.status(201).json({ message: "Nouveau post enregistré!" })
-//         )
-//         .catch((error) => res.status(400).json({ error }))
-// }
 
 exports.deletePost = (req, res, next) => {
     Post.findOne({ _id: req.params.id })

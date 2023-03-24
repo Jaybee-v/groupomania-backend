@@ -33,9 +33,13 @@ app.use((req, res, next) => {
 const userRoutes = require("./routes/user")
 const postRoutes = require("./routes/post")
 const commentRoutes = require("./routes/commentary")
+const avatarUserRoutes = require("./routes/avatarUser")
+
 app.use("/images/posts", express.static(path.join(__dirname, "images/posts")))
+app.use("/images/avatar", express.static(path.join(__dirname, "images/avatar")))
 app.use("/user", userRoutes)
 app.use("/post", postRoutes)
 app.use("/comment", commentRoutes)
+app.use("/avatar", avatarUserRoutes)
 
 module.exports = app
