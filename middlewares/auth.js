@@ -9,9 +9,11 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, process.env.TOKEN)
         // recuperation de l'id de l'utilisateur du token
         const userId = decodedToken.userId
+        const role = decodedToken.role
         console.log(token)
         req.auth = {
             userId: userId,
+            role: role,
         }
         next()
     } catch (error) {

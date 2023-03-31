@@ -13,9 +13,7 @@ exports.signup = (req, res, next) => {
                 lastName: req.body.lastName,
                 email: req.body.email,
                 password: hash,
-                // avatarUrl: `${req.protocol}://${req.get("host")}/images/${
-                //     req.file.filename
-                // }`,
+                role: req.body.role,
             })
             user.save()
                 .then(() =>
@@ -42,8 +40,9 @@ exports.signin = (req, res, next) => {
                         } else {
                             res.status(200).json({
                                 userId: user._id,
+                                role: user.role,
                                 token: jwt.sign(
-                                    { userId: user._id },
+                                    { userId: user._id, role: user.role },
                                     process.env.TOKEN,
                                     { expiresIn: "72h" }
                                 ),

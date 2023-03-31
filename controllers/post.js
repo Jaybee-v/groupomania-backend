@@ -37,9 +37,10 @@ exports.addPost = async (req, res, next) => {
 }
 
 exports.deletePost = (req, res, next) => {
+    console.log(req.auth.role)
     Post.findOne({ _id: req.params.id })
         .then((post) => {
-            if (post.userId != req.auth.userId) {
+            if (post.userId != req.auth.userId && req.auth.role !== "admin") {
                 res.status(401).json({ message: "User unauthorized" })
             } else {
                 Post.deleteOne({ _id: req.params.id })
@@ -57,7 +58,12 @@ exports.deletePost = (req, res, next) => {
 exports.editPost = (req, res, next) => {
     Post.findOne({ _id: req.params.id })
         .then((post) => {
-            if (post.userId != req.body.userId) {
+            if (post.userId != req.auth.userId && req.auth.role === "admin") {
+                req.body.content =
+                    req.body.content + "\n (message modifié par modérateur)"
+                req.body.userId = post.userId
+            }
+            if (post.userId != req.auth.userId && req.auth.role !== "admin") {
                 res.status(401).json({ message: "Utilisateur non autorisé!" })
             } else {
                 Post.updateOne(
