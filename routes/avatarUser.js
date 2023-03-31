@@ -6,7 +6,7 @@ const auth = require("../middlewares/auth")
 
 router.get("/:id", avatarUserCtrl.getAvatarUser)
 router.post("/", multer, avatarUserCtrl.postAvatarUser)
-router.put("/:id", avatarUserCtrl.editAvatar)
+// router.put("/:id", auth, avatarUserCtrl.editAvatar)
 router.delete("/:id", auth, avatarUserCtrl.deleteAvatar)
 
 module.exports = router

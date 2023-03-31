@@ -43,31 +43,25 @@ exports.deleteAvatar = (req, res, next) => {
         .catch((err) => console.log(err))
 }
 
-exports.editAvatar = (req, res, next) => {
-    console.log(req.body)
-    const obj = req.file
-        ? {
-              ...JSON.parse(req.body),
-              imageUrl: `${req.protocol}://${req.get("host")}/images/avatar/${
-                  req.file.filename
-              }`,
-          }
-        : { ...req.body }
-    delete obj._userId
-    AvatarModel.findOne({ _id: req.params.id })
-        .then((avatar) => {
-            if (avatar.userId != req.body.userId) {
-                res.status(401).json({ message: "Not authorized to do this." })
-            } else {
-                AvatarModel.updateOne(
-                    { _id: req.params.id },
-                    { ...req.body, _id: req.params.id }
-                )
-                    .then(() => {
-                        res.status(200).json({ message: "Avatar updated" })
-                    })
-                    .catch((error) => res.status(400).json({ error }))
-            }
-        })
-        .catch((error) => res.status(401).json({ error }))
-}
+// exports.editAvatar = (req, res, next) => {
+//     console.log(req.body)
+//     const obj = req.file
+
+//     delete obj._userId
+//     AvatarModel.findOne({ _id: req.params.id })
+//         .then((avatar) => {
+//             if (avatar.userId != req.auth.userId) {
+//                 res.status(401).json({ message: "Not authorized to do this." })
+//             } else {
+//                 AvatarModel.updateOne(
+//                     { _id: req.params.id },
+//                     { ...req.file, _id: req.params.id }
+//                 )
+//                     .then(() => {
+//                         res.status(200).json({ message: "Avatar updated" })
+//                     })
+//                     .catch((error) => res.status(400).json({ error }))
+//             }
+//         })
+//         .catch((error) => res.status(401).json({ error }))
+// }
