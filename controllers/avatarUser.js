@@ -27,9 +27,10 @@ exports.getAvatarUser = (req, res, next) => {
 }
 
 exports.deleteAvatar = (req, res, next) => {
+    console.log(req.auth)
     AvatarModel.findOne({ _id: req.params.id })
         .then((avatar) => {
-            if (avatar.userId != req.body.userId) {
+            if (avatar.userId != req.auth.userId) {
                 res.status(401).json({ message: "Not authorized to do this." })
             } else {
                 AvatarModel.deleteOne({ _id: req.params.id })

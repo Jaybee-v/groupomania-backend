@@ -67,37 +67,53 @@ exports.getOneUser = (req, res, next) => {
 }
 
 exports.deleteUser = (req, res, next) => {
-    User.findOne({ _id: req.params.id })
-        .then((user) => {
-            const userId = user._id
-            Post.find()
-                .then((posts) => {
-                    const postFilter = { userId: userId }
-                    const [postsUser] = posts.filter(
-                        (p) => p.userId === req.params.id
-                    )
-                    Post.deleteMany(postFilter).then(() => {
-                        Comments.find().then((comments) => {
-                            const commentFilter = { userId: userId }
-                            const [commentsUser] = comments.filter(
-                                (c) => c.userId === req.params.id
-                            )
-                            Comments.deleteMany(commentFilter).then(() => {
-                                User.deleteOne({ _id: req.params.id }).then(
-                                    () => {
-                                        console.log("5")
-                                        res.status(200).json({
-                                            message: "User supprimé",
-                                        })
-                                    }
-                                )
-                            })
+    const userId = req.params.id
+
+    Post.deleteMany({ userId: userId })
+        .then(() => {
+            Comments.deleteMany({ userId: userId })
+                .then(() => {
+                    User.deleteOne({ _id: userId })
+                        .then(() => {
+                            res.status(200).json({ message: "User deleted" })
                         })
-                    })
+                        .catch((error) => res.status(401).json({ error }))
                 })
                 .catch((error) => res.status(401).json({ error }))
         })
-        .catch((error) => {
-            res.status(404).json(error)
-        })
+        .catch((error) => res.status(401).json({ error }))
+
+    // User.findOne({ _id: req.params.id })
+    //     .then((user) => {
+    //         const userId = user._id
+    //         Post.find()
+    //             .then((posts) => {
+    //                 const postFilter = { userId: userId }
+    //                 const [postsUser] = posts.filter(
+    //                     (p) => p.userId === req.params.id
+    //                 )
+    //                 Post.deleteMany(postFilter).then(() => {
+    //                     Comments.find().then((comments) => {
+    //                         const commentFilter = { userId: userId }
+    //                         const [commentsUser] = comments.filter(
+    //                             (c) => c.userId === req.params.id
+    //                         )
+    //                         Comments.deleteMany(commentsFilter).then(() => {
+    //                             User.deleteOne({ _id: req.params.id }).then(
+    //                                 () => {
+    //                                     console.log("5")
+    //                                     res.status(200).json({
+    //                                         message: "User supprimé",
+    //                                     })
+    //                                 }
+    //                             )
+    //                         })
+    //                     })
+    //                 })
+    //             })
+    //             .catch((error) => res.status(401).json({ error }))
+    //     })
+    //     .catch((error) => {
+    //         res.status(404).json(error)
+    //     })
 }
